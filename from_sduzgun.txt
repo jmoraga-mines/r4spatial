@@ -1,0 +1,22 @@
+### From Dr. Duzgun
+
+
+
+01. https://mgimond.github.io/Spatial/mapping-data-in-r.html
+
+02. A full set of spatial analyses tutorial can be found from 
+https://spatialanalysisonline.com/An%20Introduction%20to%20Spatial%20Data%20Analysis%20in%20R.pdf
+
+03. Discrete Point Pattern:
+https://mgimond.github.io/Spatial/point-pattern-analysis-in-r.html
+
+04. Spatially Continuous Point Data:
+https://mgimond.github.io/Spatial/interpolation-in-r.html
+
+05. Area Data:
+https://mgimond.github.io/Spatial/spatial-autocorrelation-in-r.html
+
+
+
+4
+
