@@ -64,3 +64,43 @@ Zcut <- cut(pop.lg.km, breaks=brk, labels=1:4)  # Classify the raster
 E    <- tess(image=Zcut)  # Create a tesselated surface
 
 plot(E, main="", las=1)
+
+# Next, we’ll tally the quadrat counts within each tessellated area then compute
+# their density values (number of points per quadrat area).
+Q   <- quadratcount(starbucks.km, tess = E)  # Tally counts
+Q.d <- intensity(Q)  # Compute density
+Q.d
+
+# Plot the density values across each tessellated region.
+plot(intensity(Q, image=TRUE), las=1, main=NULL)
+plot(starbucks.km, pch=20, cex=0.6, col=rgb(1,1,1,.5), add=TRUE)
+
+# Let’s modify the color scheme.
+cl <-  interp.colours(c("lightyellow", "orange" ,"red"), E$n)
+plot( intensity(Q, image=TRUE), las=1, col=cl, main=NULL)
+plot(starbucks.km, pch=20, cex=0.6, col=rgb(0,0,0,.5), add=TRUE)
+
+### Kernel density raster
+# The spatstat package has a function called density which computes an isotropic
+# kernel intensity estimate of the point pattern. Its bandwidth defines the 
+# kernel’s window extent.
+
+# This next code chunk uses the default bandwidth.
+K1 <- density(starbucks.km) # Using the default bandwidth
+plot(K1, main=NULL, las=1)
+contour(K1, add=TRUE)
+
+# In this next chunk, a 50 km bandwidth (sigma = 50) is used. Note that the 
+# length unit is extracted from the point layer’s mapping units (which was 
+# rescaled to kilometers earlier in this exercise).
+K2 <- density(starbucks.km, sigma=50) # Using a 50km bandwidth
+plot(K2, main=NULL, las=1)
+contour(K2, add=TRUE)
+
+# The kernel defaults to a gaussian smoothing function. The smoothing function 
+# can be changed to a quartic, disc or epanechnikov function. For example, to 
+# change the kernel to a disc function type:
+K3 <- density(starbucks.km, kernel = "disc", sigma=50) # Using a 50km bandwidth
+plot(K3, main=NULL, las=1)
+contour(K3, add=TRUE)
+
