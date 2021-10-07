@@ -10,7 +10,7 @@ p_load(rgdal, tmap)
 z <- gzcon(url("https://github.com/mgimond/Spatial/raw/main/Data/precip.rds"))
 P <- readRDS(z)
 
-# Load Texas boudary map
+# Load Texas boundary map
 z <- gzcon(url("https://github.com/mgimond/Spatial/raw/main/Data/texas.rds"))
 W <- readRDS(z)
 
