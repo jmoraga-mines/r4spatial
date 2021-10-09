@@ -92,3 +92,4 @@ abline(v=coef(M)[2], col="red")
 # from this simulation.
 
 ?sf::st_write
+
