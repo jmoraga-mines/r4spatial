@@ -1,4 +1,5 @@
 ### Interpolation in R
+# From: https://mgimond.github.io/Spatial/interpolation-in-r.html
 
 # This is cleaner than using library, require and install.packages
 if (!require("pacman")) 

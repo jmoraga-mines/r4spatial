@@ -1,4 +1,7 @@
 ###  Spatial autocorrelation in R
+# From: https://mgimond.github.io/Spatial/spatial-autocorrelation-in-r.html
+
+
 # This is cleaner than using library, require and install.packages
 if (!require("pacman")) 
   install.packages("pacman")
@@ -7,11 +10,27 @@ if (!require("pacman"))
 load(url("https://github.com/mgimond/Spatial/raw/main/Data/moransI.RData"))
 print(s1)
 print(as.data.frame(s1))
+print(typeof(s1))
+save(s1, file="data/s1.RData")
+rgdal::writeOGR(s1, "data/s1_Income.shp", driver = "ESRI Shapefile", 
+                layer = c("Income"), overwrite_layer = TRUE)
+rgdal::writeOGR(s1, "data/s1_All.shp", driver = "ESRI Shapefile", 
+                layer = names(s1), overwrite_layer = T)
+# sf::st_write(s1, "s1_layers.shp", "NAME")
+s2 <- sf::st_read("data/s1_All.shp")
+print(names(s2))
+s3 <- sf::st_read("data/s1_Income.shp")
+print(names(s3))
 
 # Plot map
 p_load(tmap)
 tm_shape(s1) + tm_polygons(style="quantile", col = "Income") +
   tm_legend(outside = TRUE, text.size = .8) 
+
+tm_shape(s2) + tm_polygons(col = "NAME", palette = "Set1") +
+  tm_legend(outside = TRUE, text.size = .8, main.title="s2 file") +
+  tm_text("NAME", just = "center", size = 0.5)
+
 
 ### Define neighboring polygons
 p_load(spdep)
@@ -72,4 +91,4 @@ abline(v=coef(M)[2], col="red")
 # spatially autocorrelated. In the next step, we’ll compute a pseudo p-value 
 # from this simulation.
 
-
+?sf::st_write

@@ -1,8 +1,13 @@
 ### Mapping data in R 
 ### from: https://mgimond.github.io/Spatial/mapping-data-in-r.html
 
+# Loads the "pacman" library
+library("pacman")
+# In most cases, this will just give you an error because the library is not
+# installed by default in your system
 
-# This is cleaner than using library, require and install.packages
+# This is cleaner than using library, require and install.packages for every
+# new package, just do it once for pacman (Package manager)
 if (!require("pacman")) 
   install.packages("pacman")
 
@@ -12,6 +17,46 @@ p_load(sf)
 # loads variables from this hosted R data file
 load(url("https://github.com/mgimond/Spatial/raw/main/Data/Sample1.RData"))
 
+### Basic R
+# Functions
+
+add5 <- function(x) {
+  return(x+5) # Returns the value plus 5
+}
+
+### Using standard comments with roxygen format for automatic documentation
+#' Implements Rectified Linear Unit function
+#'
+#' @param x Input value
+#'
+#' @return return value is 0 if x <=0; x otherwise
+#'
+#' @examples
+#' ReLu(10)
+#' [1] 10
+#' ReLu(-10)
+#' [1] 0
+ReLu <- function(x){
+  if(x<0)
+    return(0)
+  else
+    return(x)
+}
+
+print(add5(10))
+print(ReLu(-10))
+
+# A loop, using a sequence of numbers from -2 to 2
+for(i in seq(-2,2)){
+  print(paste("ReLu of (", sprintf("%2d", i), "): ", ReLu(i), sep=""))
+}
+
+for(i in seq(-2,2)){
+  cat(paste("ReLu of (", sprintf("%2d", i), "): ", ReLu(i), sep=""), fill=TRUE)
+}
+### End of Basic R
+
+### Start ### Mapping data in R
 # The data objects consist of five layers: 
 # - an elevation raster (elev.r), 
 # - an interstate polyline layer (inter.sf), 
