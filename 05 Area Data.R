@@ -93,3 +93,37 @@ abline(v=coef(M)[2], col="red")
 
 ?sf::st_write
 
+### Montecarlo (MC) simulation
+#' First, we need to find the number of simulated Moran’s I values values 
+#' greater than our observed Moran’s I value.
+N.greater <- sum(coef(M)[2] > I.r)
+
+#' To compute the p-value, find the end of the distribution closest to the 
+#' observed Moran’s I value, then divide that count by the total count. Note 
+#' that this is a so-called one-sided P-value. 
+p <- min(N.greater + 1, n + 1 - N.greater) / (n + 1)
+p
+print(paste0("Chance of being wrong: ", sprintf("%0.4f",p), "%"))
+
+#' In our working example, the p-value suggests that there is a small chance 
+#' of being wrong in stating that the income values are not clustered 
+#' at the county level
+
+### Computing the Moran’s I statistic: the easy way
+#' To get the Moran’s I value, simply use the moran.test function.
+
+moran.test(s1$Income,lw)
+
+#' Note that the p-value computed from the moran.test function is not computed 
+#' from an MC simulation but analytically instead. This may not always prove to
+#' be the most accurate measure of significance. To test for significance using 
+#' the MC simulation method instead, use the moran.mc function.
+
+MC<- moran.mc(s1$Income, lw, nsim=599)
+
+# View results (including p-value)
+MC
+
+# Plot the distribution (note that this is a density plot instead of a histogram)
+plot(MC, main="", las=1)
+

@@ -46,12 +46,13 @@ Q.d <- intensity(Q)
 plot(intensity(Q, image=TRUE), main=NULL, las=1)  # Plot density raster
 plot(starbucks, pch=20, cex=0.6, col=rgb(0,0,0,.5), add=TRUE)  # Add points
 
+## Rescale to kilometers
 starbucks.km <- rescale(starbucks, 1000, "km")
 ma.km <- rescale(ma, 1000, "km")
 pop.km    <- rescale(pop, 1000, "km")
 pop.lg.km <- rescale(pop.lg, 1000, "km")
 
-# Compute the density for each quadrat (in counts per km2)
+# Compute the density for each quadrant (in counts per km2)
 Q   <- quadratcount(starbucks.km, nx= 6, ny=3)
 Q.d <- intensity(Q)
 
@@ -103,4 +104,6 @@ contour(K2, add=TRUE)
 K3 <- density(starbucks.km, kernel = "disc", sigma=50) # Using a 50km bandwidth
 plot(K3, main=NULL, las=1)
 contour(K3, add=TRUE)
+
+#######
 
