@@ -39,3 +39,4 @@ vignettes/*.pdf
 .Renviron
 
 data/s1*
+valid_lst.*

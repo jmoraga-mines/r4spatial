@@ -60,7 +60,7 @@ kmeans_dst <- function(pt_lst_16, img_name, n_clusters=5, plot_image = FALSE) {
 # Read all Landsat-8 LST files from data directory
 # data_directory = "F:/Geothermal Energy Project/Data/LST/BradyandDesert/Landsat" 
 # data_directory = "F:/Geothermal Energy Project/Data/LST/BradyandDesert/Landsat2/ST" 
-data_directory = "C:/Users/ayaz_a/Desktop/R/data/LST/." 
+data_directory = "data/." 
 lst_file_names = list.files(data_directory, pattern="([:alnum:]|_)*_ST[.]tif", recursive=TRUE, full.names = TRUE)
 lst_file_names = lst_file_names[grep("tif$", lst_file_names)]
 lst_list <- vector(mode = "list", length = 0)
@@ -128,37 +128,38 @@ n_cells <- clean_stack@nrows * clean_stack@ncols
 # plot(clean_stack[[25:36]])
 # plot(clean_stack[[37:48]])
 # plot(clean_stack[[49:50]])
-s = summary(clean_stack)
-na_cells = (s["NA's",])/n_cells
-valid_cells = names(clean_stack)[(na_cells<0.5)]
+s <- summary(clean_stack)
+na_cells <- (s["NA's",])/n_cells
+valid_cells <- names(clean_stack)[(na_cells<0.5)]
 clean_stack <- clean_stack[[valid_cells]]
-plot(clean_stack[[1:6]])
+# plot(clean_stack[[1:6]])
+plot(clean_stack[[valid_cells]])
 print("Delete from stack the anomalous remaining layers")
-anomalous <-c("LST_2018.09.07")
+anomalous <- c("LST_2018.09.07")
 clean_stack <- dropLayer(clean_stack, anomalous)
 plot(clean_stack)
 
 doe_writeRaster(clean_stack, "valid_lst")
 
 # new_filename = paste(data_directory,"valid_lst.tif", sep="/")
-new_filename = "valid_lst_tif.tif"
+new_filename <- "valid_lst_tif.tif"
 f1 <- writeRaster(clean_stack, new_filename, format = "GTiff", overwrite=TRUE)
 hdr(f1, format="ENVI")
 rm(qa_stack, all_lst, lst_list)
 
-###### Conversions from LST to Celsius
+###### Conversions from LST format (Kelvin*10) to Celsius
 ### K = LST/10
 ### C = K - 273.15
 valid_lst <- stack("valid_lst.gri")
 
 
-valid_lst = valid_lst/10.0-273.15
+valid_lst <- valid_lst/10.0-273.15
 ###
 spplot(valid_lst[[12:15]])
 df_coord <- coordinates(valid_lst)
 df <- as.data.frame(valid_lst)
 df <- cbind(df_coord, df)
-img_names = names(valid_lst)
+img_names <- names(valid_lst)
 
 k_means_list <- vector(mode = "list", length = 0)
 for (img in img_names) {
@@ -179,7 +180,7 @@ kmeans_stack <- brick("LST_kmeans_stack.gri")
 k_df <- rasterToPoints(kmeans_stack)
 
 rm(k_means_list, kmeans_stack)
-k_df[is.na(k_df)] = 0
+k_df[is.na(k_df)] <- 0
 summary_df <- as.data.frame(k_df[,1:2])
 k_df <- as.data.frame(k_df[,3:(ncol(k_df))])
 # n <- colnames(k_df)
@@ -194,8 +195,8 @@ summary_df$cold <- rowSums(k_df == 2, na.rm = TRUE)
 summary_df$coldest <- rowSums(k_df == 1, na.rm = TRUE)
 summary_df$valid <- rowSums(k_df >= 1, na.rm = TRUE)
 rm(k_df)
-summary_df$probability = (summary_df$hottest+summary_df$hot*.5-summary_df$coldest)/summary_df$valid
-summary_df$probability = (summary_df$hottest)/summary_df$valid
+summary_df$probability <- (summary_df$hottest+summary_df$hot*.5-summary_df$coldest)/summary_df$valid
+summary_df$probability <- (summary_df$hottest)/summary_df$valid
 sp_df <- coords2spatialdf(summary_df[c("x", "y")], as.data.frame(summary_df$probability))
 r <- rasterize(sp_df, extent_hymap_lst)
 # r <- dropLayer(r, 1)

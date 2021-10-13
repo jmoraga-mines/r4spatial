@@ -686,4 +686,7 @@ print(paste0("Chance of being wrong: ", sprintf("%0.4f",MC$p.value), "%"))
 plot(MC, main="Distribution", las=1)
 
 
-
+file.remove("data/s1.RData")
+files2delete <- list.files(path = "data", pattern = "^s1_", full.names = T)
+file.remove(files2delete)
+# lapply(files2delete, file.remove)
