@@ -21,6 +21,14 @@ load(url("https://github.com/mgimond/Spatial/raw/main/Data/Sample1.RData"))
 ### Basic R
 # Functions
 
+#' Title
+#'
+#' @param x 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 add5 <- function(x) {
   return(x+5) # Returns the value plus 5
 }
@@ -689,4 +697,7 @@ plot(MC, main="Distribution", las=1)
 file.remove("data/s1.RData")
 files2delete <- list.files(path = "data", pattern = "^s1_", full.names = T)
 file.remove(files2delete)
-# lapply(files2delete, file.remove)
+
+# files2delete <- list.files(pattern = "valid_lst", full.names = T)
+# print(files2delete)
+# delete_results <- lapply(files2delete, file.remove)
